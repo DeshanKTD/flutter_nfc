@@ -14,12 +14,16 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   String _platformVersion = 'Unknown';
   String _greetings = 'Bad bad';
+  String _nfcData = "no data";
+  StreamSubscription _dataSubscription = null;
+
 
   @override
   void initState() {
     super.initState();
     initPlatformState();
     initGreetings();
+    // readNFC();
   }
 
   // Platform messages are asynchronous, so we initialize in an async method.
@@ -78,6 +82,23 @@ class _MyAppState extends State<MyApp> {
     }
   }
 
+  Future<void> readNFC() async {
+
+    // startNFC();
+    print('NFC: Scan started');
+
+    print('NFC: Scan readed NFC tag');
+    try{
+    _dataSubscription =  FlutterNfc.read.listen((response) {
+      setState(() {
+        this._nfcData = response.toString();
+      });
+    });
+    }catch(e){
+      print(e);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -91,9 +112,10 @@ class _MyAppState extends State<MyApp> {
             children: <Widget>[
               Text('Running on: $_platformVersion\n'),
               Text(_greetings),
+              Text(_nfcData,style: TextStyle(fontSize: 25.0),),
               IconButton(
                 icon: Icon(Icons.nfc),
-                onPressed: this.startNFC,
+                onPressed: this.readNFC
               ),
               IconButton(
                 icon: Icon(Icons.stop),

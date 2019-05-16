@@ -23,6 +23,7 @@ class _MyAppState extends State<MyApp> {
     super.initState();
     initPlatformState();
     initGreetings();
+    readNFC();
     // readNFC();
   }
 
@@ -83,11 +84,6 @@ class _MyAppState extends State<MyApp> {
   }
 
   Future<void> readNFC() async {
-
-    // startNFC();
-    print('NFC: Scan started');
-
-    print('NFC: Scan readed NFC tag');
     try{
     _dataSubscription =  FlutterNfc.read.listen((response) {
       setState(() {
@@ -115,7 +111,7 @@ class _MyAppState extends State<MyApp> {
               Text(_nfcData,style: TextStyle(fontSize: 25.0),),
               IconButton(
                 icon: Icon(Icons.nfc),
-                onPressed: this.readNFC
+                onPressed: this.startNFC
               ),
               IconButton(
                 icon: Icon(Icons.stop),
